@@ -1,0 +1,49 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Account is already configured",
+            "reauth_successful": "Re-authentication was successful",
+            "wrong_account": "The tokens belong to a different Akahu account than the one being reauthenticated."
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "reauth_confirm": {
+                "data": {
+                    "app_token": "App ID token",
+                    "user_token": "User access token"
+                },
+                "data_description": {
+                    "app_token": "The App ID token from your Akahu personal app (starts with `app_token_`).",
+                    "user_token": "The User access token from your Akahu personal app (starts with `user_token_`)."
+                },
+                "description": "Your Akahu tokens are no longer valid. Re-enter them to reconnect."
+            },
+            "user": {
+                "data": {
+                    "app_token": "App ID token",
+                    "user_token": "User access token"
+                },
+                "data_description": {
+                    "app_token": "The App ID token from your Akahu personal app (starts with `app_token_`).",
+                    "user_token": "The User access token from your Akahu personal app (starts with `user_token_`)."
+                },
+                "description": "Create a personal app in your Akahu developer portal to obtain your App ID Token and User Access Token."
+            }
+        }
+    },
+    "exceptions": {
+        "cannot_connect": {
+            "message": "Unable to reach the Akahu API: {error}"
+        },
+        "invalid_auth": {
+            "message": "Authentication with the Akahu API failed."
+        },
+        "unknown_error": {
+            "message": "Unexpected error talking to the Akahu API: {error}"
+        }
+    }
+}

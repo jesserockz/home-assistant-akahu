@@ -1,0 +1,49 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Create a personal app in your Akahu developer portal to obtain your App ID Token and User Access Token.",
+        "data": {
+          "app_token": "App ID token",
+          "user_token": "User access token"
+        },
+        "data_description": {
+          "app_token": "The App ID token from your Akahu personal app (starts with `app_token_`).",
+          "user_token": "The User access token from your Akahu personal app (starts with `user_token_`)."
+        }
+      },
+      "reauth_confirm": {
+        "description": "Your Akahu tokens are no longer valid. Re-enter them to reconnect.",
+        "data": {
+          "app_token": "[%key:component::akahu::config::step::user::data::app_token%]",
+          "user_token": "[%key:component::akahu::config::step::user::data::user_token%]"
+        },
+        "data_description": {
+          "app_token": "[%key:component::akahu::config::step::user::data_description::app_token%]",
+          "user_token": "[%key:component::akahu::config::step::user::data_description::user_token%]"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_account%]",
+      "reauth_successful": "[%key:common::config_flow::abort::reauth_successful%]",
+      "wrong_account": "The tokens belong to a different Akahu account than the one being reauthenticated."
+    }
+  },
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Unable to reach the Akahu API: {error}"
+    },
+    "invalid_auth": {
+      "message": "Authentication with the Akahu API failed."
+    },
+    "unknown_error": {
+      "message": "Unexpected error talking to the Akahu API: {error}"
+    }
+  }
+}
