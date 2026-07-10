@@ -3,6 +3,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -37,6 +38,7 @@ class AkahuCoordinator(DataUpdateCoordinator[dict[str, AkahuAccount]]):
             app_token=config_entry.data[CONF_APP_TOKEN],
             user_token=config_entry.data[CONF_USER_TOKEN],
         )
+        self._known_connection_ids: set[str] = set()
 
     async def _async_update_data(self) -> dict[str, AkahuAccount]:
         """Fetch the latest account data from Akahu."""
@@ -59,4 +61,28 @@ class AkahuCoordinator(DataUpdateCoordinator[dict[str, AkahuAccount]]):
                 translation_key="unknown_error",
                 translation_placeholders={"error": str(err)},
             ) from err
-        return {account.id: account for account in accounts}
+
+        data = {account.id: account for account in accounts}
+        self._async_remove_stale_devices(data)
+        return data
+
+    def _async_remove_stale_devices(
+        self, accounts: dict[str, AkahuAccount]
+    ) -> None:
+        """Drop devices for connections Akahu no longer reports."""
+        current_connection_ids = {
+            account.connection_id or "unknown" for account in accounts.values()
+        }
+        stale = self._known_connection_ids - current_connection_ids
+        if stale:
+            device_registry = dr.async_get(self.hass)
+            for connection_id in stale:
+                device = device_registry.async_get_device(
+                    identifiers={(DOMAIN, f"connection_{connection_id}")}
+                )
+                if device is not None:
+                    device_registry.async_update_device(
+                        device.id,
+                        remove_config_entry_id=self.config_entry.entry_id,
+                    )
+        self._known_connection_ids = current_connection_ids

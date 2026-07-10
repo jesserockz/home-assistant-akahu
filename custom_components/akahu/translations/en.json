@@ -3,6 +3,7 @@
         "abort": {
             "already_configured": "Account is already configured",
             "reauth_successful": "Re-authentication was successful",
+            "reconfigure_successful": "Re-configuration was successful",
             "wrong_account": "The tokens belong to a different Akahu account than the one being reauthenticated."
         },
         "error": {
@@ -21,6 +22,17 @@
                     "user_token": "The User access token from your Akahu personal app (starts with `user_token_`)."
                 },
                 "description": "Your Akahu tokens are no longer valid. Re-enter them to reconnect."
+            },
+            "reconfigure": {
+                "data": {
+                    "app_token": "App ID token",
+                    "user_token": "User access token"
+                },
+                "data_description": {
+                    "app_token": "The App ID token from your Akahu personal app (starts with `app_token_`).",
+                    "user_token": "The User access token from your Akahu personal app (starts with `user_token_`)."
+                },
+                "description": "Update the App ID token and User access token for this Akahu entry. The tokens must belong to the same Akahu user the entry was originally created for."
             },
             "user": {
                 "data": {
