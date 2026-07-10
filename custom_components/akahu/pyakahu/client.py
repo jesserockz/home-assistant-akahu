@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from aiohttp import ClientError, ClientResponseError, ClientSession
+from aiohttp import ClientError, ClientSession
 
 from .exceptions import AkahuAuthError, AkahuConnectionError
 from .models import AkahuAccount, AkahuUser
@@ -37,16 +37,15 @@ class AkahuClient:
             response = await self._session.get(
                 f"{API_BASE_URL}{path}", headers=self._headers
             )
-            if response.status in (401, 403):
-                raise AkahuAuthError(f"Unauthorized response: {response.status}")
-            response.raise_for_status()
-            return await response.json()
-        except ClientResponseError as err:
-            if err.status in (401, 403):
-                raise AkahuAuthError(str(err)) from err
-            raise AkahuConnectionError(str(err)) from err
         except ClientError as err:
             raise AkahuConnectionError(str(err)) from err
+
+        if response.status in (401, 403):
+            raise AkahuAuthError(f"Unauthorized response: {response.status}")
+        if response.status >= 400:
+            raise AkahuConnectionError(f"HTTP {response.status}")
+        payload: dict[str, Any] = await response.json()
+        return payload
 
     async def async_get_user(self) -> AkahuUser:
         """Fetch the authenticated user's profile."""
